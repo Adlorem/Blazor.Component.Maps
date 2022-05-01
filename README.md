@@ -1,5 +1,5 @@
 
-# Blazor Google maps integration with Googla places autocomplete with extra support for MudBlazor.
+# Blazor Google maps integration with Google places autocomplete with extra support for MudBlazor.
 
 The aim of this project is to easily integrate google maps with your Blazor application. 
 This means separate support for google maps and google places autocompleted that can be bind together. 
@@ -104,7 +104,7 @@ The heading for aerial imagery in degrees measured clockwise from cardinal direc
 Headings are snapped to the nearest available angle for which imagery is available.
 - **`Tilt`: `byte { get; set; }` (default: 0)** <br />
 Controls the automatic switching behavior for the angle of incidence of the map. The only allowed values are 0 and 45.
-45° imagery is not available (this is the default behavior). 45° imagery is only available for satellite and hybrid map types, within some locations, and at some zoom levels.
+45Â° imagery is not available (this is the default behavior). 45Â° imagery is only available for satellite and hybrid map types, within some locations, and at some zoom levels.
 - **`ClickableIcons`: `bool { get; set; }` (default: true)** <br />
 When false, map icons are not clickable. A map icon represents a point of interest, also known as a POI. By default map icons are clickable.
 - **`DisableDefaultUI`: `bool { get; set; }` (default: false)** <br />
