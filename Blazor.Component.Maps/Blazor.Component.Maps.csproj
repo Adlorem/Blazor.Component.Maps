@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <RazorLangVersion>3.0</RazorLangVersion>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+	  <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+	  <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+		<PackageReference Include="Microsoft.JSInterop" Version="6.0.4" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.4" />
+		<PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.18" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="wwwroot\**\*" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="wwwroot\googleMaps.min.js" />
+	</ItemGroup>
+
+</Project>

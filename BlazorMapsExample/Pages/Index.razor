@@ -1,0 +1,76 @@
+﻿@page "/"
+@inject IGooglePlacesService _googlePlacesService
+<PageTitle>Index</PageTitle>
+
+<div class="container-fluid p-3 mb-3 border rounded">
+
+	<div class="container-fluid p-1 mb-3 border border-bottom-0 border-right-0 border-left-0">
+		<div class="row pb-2">
+			<div class="col-12">
+				<GooglePlacesAutocomplete ApiKey="@_googleMapsApiKey" Class="form-control" OnPlaceChanged="PlaceChanged" />
+			</div>			
+		</div>
+		<div class="row pb-2">
+			<label>lat: @_mapCenter.Latitude</label>
+			<label>long: @_mapCenter.Longitude</label>
+            <div class="col-12">
+                <div style="height: 400px;">
+                    <GoogleMap @ref="_googleMap"
+                               Center="@_mapCenter"
+                               Zoom="@_zoomLevel"
+                               Markers="@_markers"
+                               UsePlacesLibrary="true"
+                               ApiKey="@_googleMapsApiKey" />
+
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+@code {
+    private string _googleMapsApiKey = "";
+    private GoogleMap _googleMap;
+    private GeolocationData _mapCenter = new GeolocationData(0,0);
+    private byte _zoomLevel = 10;
+    private ObservableRangeCollection<GoogleMapMarker> _markers = new ObservableRangeCollection<GoogleMapMarker>();
+
+	private void PlaceChanged(GooglePlace place)
+	{
+		if (place != null)
+		{
+			PlaceMarkerOnMap(place);
+			var position = new GeolocationData(place.Geometry.Location.Lat, place.Geometry.Location.Lng);
+			_mapCenter = position;
+			_zoomLevel = 14;
+			StateHasChanged();
+		}
+	}
+
+    private void PlaceMarkerOnMap(GooglePlace place)
+    {
+        if (place != null)
+        {
+            var position = new GeolocationData(place.Geometry.Location.Lat, place.Geometry.Location.Lng);      
+            _markers.Clear();
+            _markers.Add(new GoogleMapMarker(position)
+                {
+                    AnchorPoint = new Point() { X = -10, Y = -35 },
+                    Animation = GoogleMapMarkerAnimationTypes.DROP,
+                    Clickable = true,
+                    CrossOnDrag = true,
+                    Cursor = "drag",
+                    Draggable = true,
+                    Label = new GoogleMapMarkerLabel(place.Name),
+                    Icon = new GoogleMapMarkerLabelIcon("/images/marker.png")
+                    { LabelOrigin = new Point() { Y = 20, X = 5 } },
+                    Opacity = 0.75,
+                    Optimized = true,
+                    Visible = true,
+                    ZIndex = 10,
+                });          
+        }
+    }
+}

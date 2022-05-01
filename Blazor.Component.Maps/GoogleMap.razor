@@ -1,0 +1,11 @@
+﻿@implements IAsyncDisposable
+
+@inject IGeolocationService _geolocationService
+@inject IGoogleMapService _mapService
+
+<div id="@_mapContainerId" @ref="_jsMap"
+	 style="position: relative; overflow: hidden; width: @(_containerWidth); height: @(_containerHeight);" @attributes=AllOtherAttributes>
+</div>
+
+
+@*https://developers.google.com/maps/documentation/javascript/reference*@

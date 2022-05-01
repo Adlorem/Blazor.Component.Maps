@@ -1,0 +1,81 @@
+﻿@page "/"
+@inject IGooglePlacesService _googlePlacesService
+<PageTitle>Index</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
+<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
+<MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>
+
+
+
+<MudContainer Style="height:500px">
+        <MudGooglePlacesAutocomplete @bind-Value="_text" 
+        Adornment="Adornment.Start"
+        AdornmentIcon="@Icons.Material.Filled.Map"
+        ApiKey="@_googleMapsApiKey" 
+        OnPlaceChanged="PlaceChanged" />   
+        <br/>
+        <div style="height:500px">
+               		<GoogleMap @ref="_googleMap"		
+					ApiKey="@_googleMapsApiKey" 
+                    UsePlacesLibrary="true" 
+                    Zoom="@_zoomLevel" 
+                    Center="_mapCenter"
+                    Markers="_markers"/>
+        </div>
+</MudContainer>
+
+
+
+@code{
+    private string _text;
+    private string _googleMapsApiKey = "";
+    private GoogleMap _googleMap;
+    private GeolocationData _mapCenter;
+    private byte _zoomLevel = 5;
+    private ObservableRangeCollection<GoogleMapMarker> _markers = new ObservableRangeCollection<GoogleMapMarker>();
+
+
+    private void UpdateUI()
+    {
+        StateHasChanged();
+    }
+
+    private void PlaceChanged(GooglePlace place)
+    {
+        if (place != null)
+        {        
+            var position = new GeolocationData(place.Geometry.Location.Lat, place.Geometry.Location.Lng);
+            _mapCenter = position;
+            _zoomLevel = 14;
+            PlaceMarkerOnMap(place);
+            StateHasChanged();
+        }
+    }
+
+    private void PlaceMarkerOnMap(GooglePlace place)
+    {
+        if (place != null)
+        {
+            var position = new GeolocationData(place.Geometry.Location.Lat, place.Geometry.Location.Lng);      
+            _markers.Clear();
+            _markers.Add(new GoogleMapMarker(position)
+                {
+                    AnchorPoint = new Point() { X = -10, Y = -35 },
+                    Animation = GoogleMapMarkerAnimationTypes.DROP,
+                    Clickable = true,
+                    CrossOnDrag = true,
+                    Cursor = "drag",
+                    Draggable = true,
+                    Label = new GoogleMapMarkerLabel(place.Name),
+                    Icon = new GoogleMapMarkerLabelIcon("/images/marker.png")
+                    { LabelOrigin = new Point() { Y = 20, X = 5 } },
+                    Opacity = 0.75,
+                    Optimized = true,
+                    Visible = true,
+                    ZIndex = 1,
+                });          
+        }
+    }
+
+}
