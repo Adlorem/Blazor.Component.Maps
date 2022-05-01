@@ -1,21 +1,18 @@
 
 # Blazor Google maps integration with Googla places autocomplete with extra support for MudBlazor.
 
-The aim of this project is to easily integrate google maps with your blazor appliaction.
-This means separate support for google maps and google places autocompleted that can be bind together.
+The aim of this project is to easily integrate google maps with your Blazor application. 
+This means separate support for google maps and google places autocompleted that can be bind together. 
 Original google maps code was borrowed from this great repository:
 
 https://github.com/majorimi/blazor-components
 
-Please note that original code was modyfied and this repository is not compatybile with original respository.
-
-
-
+Please note that original code was modified and this repository is no longer compatible with the original repository.
 
 ## Usage/Examples
 
 1. Add library to your project.
-2. Modify your Program.cs and add this lines:
+2. Modify your Program.cs and add these lines:
 
 ```c#
 using Blazor.Component.Maps;
