@@ -1,5 +1,5 @@
 
-# Blazor Google maps integration with Google places autocomplete with extra support for MudBlazor.
+# Blazor Google maps and Google places autocomplete integration with extra support for MudBlazor.
 
 The aim of this project is to easily integrate google maps with your Blazor application. 
 This means separate support for google maps and google places autocompleted that can be bind together. 
