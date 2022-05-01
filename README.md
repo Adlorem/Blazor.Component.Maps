@@ -45,7 +45,10 @@ Basic google maps autocomplete usage
 
 
 ```
+### MudBlazor support
 
+This library was written to support MudBlazor components. In case you intend to use MudBlazor please import additonal library MudGooglePlacesAutocomplete.
+This will allow you to use MudGooglePlacesAutocomplete component that fully supports MudBlazor. Please check MudBlazorMapsExample for details.
 
 ## Documentation
 
@@ -221,4 +224,12 @@ Lets you add custom attributes to your autocomplete input.
 ### Events
 
 - **`OnPlaceChanged`: `EventCallback<GooglePlace>`** <br />
-Callback function for Google autocomplete place change listener function.
+Callback function for Google autocomplete place change listener function. Returns google place data.
+
+### Final notice
+
+Remember to provide your own google api key when using this library. Please check provided examples for details.
+
+## Disclaimer
+
+REMEMBER YOU ARE RESPONSIBLE FOR SECURING YOUR OWN GOOGLE API KEY WHEN USING THIS LIBRARY AS YOU API KEY WILL BE EXPOSED IN APPLICATION.
