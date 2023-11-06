@@ -11,6 +11,8 @@ namespace Blazor.Component.Maps
         public string ApiKey { get; set; }
         [Parameter]
         public string Class { get; set; }
+        [Parameter]
+        public string Placeholder { get; set; }
 
         private string _inputElementId = $"input_{Guid.NewGuid().ToString("n")}";
 
