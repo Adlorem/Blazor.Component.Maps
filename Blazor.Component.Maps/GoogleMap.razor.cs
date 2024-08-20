@@ -826,7 +826,15 @@ namespace Blazor.Component.Maps
         private bool _mapInitialized = false;
         private bool _isDragging = false;
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (firstRender)
+            {
+                await InitializeMap();
+            }
+        }
+
+        protected async Task InitializeMap()
         {
             {
                 await _mapService.InitMapAsync(apiKey: ApiKey,
