@@ -169,5 +169,7 @@ namespace Blazor.Component.Maps
 		/// <param name="markers">Enumerable markers removed or replaced</param>
 		/// <returns></returns>
 		Task CreateMarkersAsync(IEnumerable<GoogleMapMarker>? newMarkers, IEnumerable<GoogleMapMarker>? markers);
+		
+		Task CreatePolygonsAsync(IEnumerable<GoogleMapPolygon>? newPolygons, IEnumerable<GoogleMapPolygon>? polygons);
 	}
 }

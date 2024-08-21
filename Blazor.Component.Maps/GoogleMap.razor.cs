@@ -172,7 +172,29 @@ namespace Blazor.Component.Maps
         {
             InvokeAsync(async () => await _mapService.CreateMarkersAsync(e.NewItems?.Cast<GoogleMapMarker>(), _markers?.Cast<GoogleMapMarker>()));
         }
-
+        private ObservableRangeCollection<GoogleMapPolygon>? _polygons;
+        /// <summary>
+        /// PolygonOptions object used to define the properties that can be set on a Polygon.
+        /// ObservableCollection can be initialized only once! Add or remove items to the collection (use `OnMapInitialized` event or user interactions) the change polygon properties (Polygon properties value changes not detected).
+        /// </summary>
+        [Parameter]
+        public ObservableRangeCollection<GoogleMapPolygon>? Polygons
+        {
+            get => _polygons;
+            set
+            {
+                if (_polygons is null && value is not null) //Subscribe to events only once!
+                {
+                    _polygons = value;
+                    _polygons.CollectionChanged += PolygonsChanges;
+                }
+            }
+        }
+        private void PolygonsChanges(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            InvokeAsync(async () => await _mapService.CreatePolygonsAsync(e.NewItems?.Cast<GoogleMapPolygon>(), _polygons?.Cast<GoogleMapPolygon>()));
+        }
+        
         private byte _zoomLevel = 3;
         /// <summary>
         /// Defines the zoom level of the map, which determines the magnification level of the map.
@@ -1123,6 +1145,11 @@ namespace Blazor.Component.Maps
             if (_markers is not null)
             {
                 _markers.CollectionChanged -= MarkersChanges;
+            }
+            
+            if (_polygons is not null)
+            {
+                _polygons.CollectionChanged -= PolygonsChanges;
             }
         }
     }

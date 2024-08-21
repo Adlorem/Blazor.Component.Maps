@@ -233,6 +233,87 @@ namespace Blazor.Component.Maps
 			}
 		}
 
+		public async Task CreatePolygonsAsync(IEnumerable<GoogleMapPolygon>? newPolygons, IEnumerable<GoogleMapPolygon>? polygons)
+		{
+			try
+			{
+				await CheckJsObjectAsync();
+
+				if (newPolygons is null && polygons is null) //Clear
+				{
+					await _mapsJs.InvokeVoidAsync("removePolygons", MapContainerId,
+						(object)_dotNetObjectReference.Value.Polygons
+							.Select(s => s.Value)
+							// .Cast<GoogleMapPolygonBase>()
+							.ToArray());
+
+					_dotNetObjectReference.Value.RemovePolygons(
+						_dotNetObjectReference.Value.Polygons.Select(s => s.Value));
+
+					return;
+				}
+
+				//Add new Polygons
+				if (newPolygons is not null)
+				{
+					_dotNetObjectReference.Value.AddPolygons(newPolygons);
+					if (newPolygons.Count() > 0)
+					{
+						await _mapsJs.InvokeVoidAsync("createPolygons", MapContainerId,
+							(object)newPolygons
+								// .Cast<GoogleMapPolygonBase>()
+								.ToArray());
+					}
+				}
+
+				if (polygons is not null)
+				{
+					//Detect switched objects add new polygons to the map
+					newPolygons = polygons.Select(x => new KeyValuePair<string, GoogleMapPolygon>(x.Id, x))
+						.Except(_dotNetObjectReference.Value.Polygons)
+						.Distinct().Select(s => s.Value).ToList();
+
+					if (newPolygons.Count() > 0)
+					{
+						_dotNetObjectReference.Value.AddPolygons(newPolygons);
+
+						await _mapsJs.InvokeVoidAsync("createPolygons", MapContainerId,
+							(object)newPolygons
+								// .Cast<GoogleMapPolygonBase>()
+								.ToArray());
+					}
+
+					//Detect removed polygons from the map
+					var removedPolygons = _dotNetObjectReference.Value.Polygons
+						.Except(polygons.Select(x => new KeyValuePair<string, GoogleMapPolygon>(x.Id, x)))
+						.Distinct().Select(s => s.Value).ToList();
+
+					if (removedPolygons.Count() > 0)
+					{
+						_dotNetObjectReference.Value.RemovePolygons(removedPolygons);
+
+						await _mapsJs.InvokeVoidAsync("removePolygons", MapContainerId,
+							(object)removedPolygons.Cast<GoogleMapMarkerBase>().ToArray());
+					}
+
+					////Update polygons NOT SUPPORTED
+					//var updateMarkers = _dotNetObjectReference.Value.Markers
+					//	.Intersect(polygons.Select(x => new KeyValuePair<string, GoogleMapMarker>(x.Id, x)))
+					//	.Select(s => s.Value).ToList();
+
+					//if (updateMarkers.Count() > 0)
+					//{
+					//	await _mapsJs.InvokeVoidAsync("updateMarkers", MapContainerId,
+					//		(object)updateMarkers.Cast<GoogleMapMarkerBase>().ToArray());
+					//}
+				}
+			}
+			catch (Exception ex)
+			{
+				throw;
+			}
+		}
+		
 		private async Task CheckJsObjectAsync()
 		{
 			if (_mapsJs is null)

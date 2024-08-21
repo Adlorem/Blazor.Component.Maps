@@ -36,10 +36,12 @@ namespace Blazor.Component.Maps
 
         private readonly Dictionary<string, GoogleMapCustomControl> _customControls;
         private readonly Dictionary<string, GoogleMapMarker> _markers;
+        private readonly Dictionary<string, GoogleMapPolygon> _polygons;
 
         public Dictionary<string, GoogleMapCustomControl> CustomControls => _customControls;
 
         public Dictionary<string, GoogleMapMarker> Markers => _markers;
+        public Dictionary<string, GoogleMapPolygon> Polygons => _polygons;
 
         /// <summary>
         /// Default constructor.
@@ -98,6 +100,7 @@ namespace Blazor.Component.Maps
             _mapContainerId = mapContainerId;
 
             _markers = new Dictionary<string, GoogleMapMarker>();
+            _polygons = new Dictionary<string, GoogleMapPolygon>();
             _customControls = new Dictionary<string, GoogleMapCustomControl>();
 
             _mapInitializedCallback = mapInitializedCallback;
@@ -158,6 +161,26 @@ namespace Blazor.Component.Maps
             }
         }
 
+        public void AddPolygons(IEnumerable<GoogleMapPolygon> polygons)
+        {
+            foreach (var item in polygons)
+            {
+                if (!_polygons.ContainsKey(item.Id))
+                {
+                    _polygons.Add(item.Id, item);
+                }
+            }
+        }
+        public void RemovePolygons(IEnumerable<GoogleMapPolygon> polygons)
+        {
+            foreach (var item in polygons)
+            {
+                if (_polygons.ContainsKey(item.Id))
+                {
+                    _polygons.Remove(item.Id);
+                }
+            }
+        }
         //Map evetns
         [JSInvokable("MapInitialized")]
         public async Task MapInitialized(string mapContainerId)

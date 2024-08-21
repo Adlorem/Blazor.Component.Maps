@@ -1,6 +1,7 @@
 ﻿let _mapsElementDict = [];
 let _placesElementDict = [];
 let _mapsMarkers = [];
+let _mapsPolygons = [];
 let _loadGoogleMaps = false;
 let _loadGoogleSearchPlaces = false;
 
@@ -652,6 +653,100 @@ function setMarkerData(markerData, marker) {
 	marker.setTitle(markerData.title);
 	marker.setVisible(markerData.visible);
 	marker.setZIndex(markerData.zIndex);
+}
+
+//Polygons
+export function createPolygons(elementId, polygons){
+
+	if (elementId && polygons && polygons.length) {
+		let mapWithDotnetRef = getElementIdWithDotnetRef(_mapsElementDict, elementId);
+		if (mapWithDotnetRef && mapWithDotnetRef.map) {
+debugger
+			for (var i = 0; i < polygons.length; i++) {
+
+				let polygonData = polygons[i];
+				let polygon = new google.maps.Polygon({
+					id: polygonData.id, //Custom id to track Markers
+					//some property does not work after set...
+					// crossOnDrag: polygonData.crossOnDrag,
+					// optimized: polygonData.optimized,
+					paths: polygonData.paths,
+					strokeColor: '#FF0000',
+					strokeOpacity: 0.8,
+					strokeWeight: 2,
+					fillColor: '#FF0000',
+					fillOpacity: 0.35,
+				});
+
+				polygon.setMap(mapWithDotnetRef.map);
+				// SS: I comment out this for now
+				// setMarkerData(polygonData, polygon);
+				_mapsPolygons.push(polygon);
+
+				//Marker events
+				if (polygonData.clickable) {
+					//Create infoWindow
+					let infoWindow = null;
+					if (polygonData.infoWindow) {
+						infoWindow = new google.maps.InfoWindow({
+							content: polygonData.infoWindow.content,
+							maxWidth: polygonData.infoWindow.maxWidth
+						});
+					}
+
+					polygon.addListener("click", () => {
+						mapWithDotnetRef.ref.invokeMethodAsync("MarkerClicked", polygonData.id);
+
+						//If polygon has info window
+						if (infoWindow) {
+							infoWindow.open(mapWithDotnetRef.map, polygon);
+						}
+					});
+				}
+			// 	if (polygonData.draggable) {
+			// 		polygon.addListener("drag", () => {
+			// 			polygonDragEvents("MarkerDrag", polygonData.id, polygon.getPosition().toJSON());
+			// 		});
+			//
+			// 		polygon.addListener("dragend", () => {
+			// 			polygonDragEvents("MarkerDragEnd", polygonData.id, polygon.getPosition().toJSON());
+			// 		});
+			//
+			// 		polygon.addListener("dragstart", () => {
+			// 			polygonDragEvents("MarkerDragStart", polygonData.id, polygon.getPosition().toJSON());
+			// 		});
+			//
+			// 		function polygonDragEvents(callBackName, id, pos) {
+			// 			let arg = {
+			// 				Latitude: pos.lat,
+			// 				Longitude: pos.lng
+			// 			};
+			// 			mapWithDotnetRef.ref.invokeMethodAsync(callBackName, id, arg);
+			// 		}
+			// 	}
+			}
+		}
+	}
+}
+
+export function removePolygons(elementId, polygons) {
+	if (elementId && polygons && polygons.length) {
+		let mapWithDotnetRef = getElementIdWithDotnetRef(_mapsElementDict, elementId);
+		if (mapWithDotnetRef && mapWithDotnetRef.map) {
+
+			for (var i = 0; i < polygons.length; i++) {
+				let polygonData = polygons[i];
+
+				_mapsPolygons.forEach( (element, index) => {
+					if (polygonData.id == element.id) {
+						element.setMap(null);
+						_mapsPolygons.splice(index, 1);
+						return;
+					}
+				});
+			}
+		}
+	}
 }
 
 //Google GeoCoder

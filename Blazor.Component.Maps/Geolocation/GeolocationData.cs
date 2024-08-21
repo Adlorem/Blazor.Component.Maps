@@ -16,6 +16,11 @@
         {
         }
 
+        public GeolocationData(GeolocationCoordinate coordinate)
+            : base(coordinate.Latitude, coordinate.Longitude)
+        {
+        }
+
         public GeolocationData(string address)
             : base(null, null)
         {
