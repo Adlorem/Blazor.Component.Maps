@@ -7,7 +7,8 @@
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
 	  <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
-	  <AssemblyName>$(MSBuildProjectName)</AssemblyName>
+	  <Title>Blazor.Component.Maps</Title>
+<!--	  <AssemblyName>$(MSBuildProjectName)</AssemblyName>-->
 	  <Version>0.9.0</Version>
   </PropertyGroup>
 
