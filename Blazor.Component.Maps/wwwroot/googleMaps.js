@@ -36,7 +36,7 @@ export function init(key, elementId, dotnetRef, backgroundColor, controlSize, us
 
 	//Inject required Google JS scripts to HTML (only once!)
 	let importedPoly = document.createElement('script');
-	importedPoly.src = "https://polyfill.io/v3/polyfill.min.js?features=default";
+	importedPoly.src = "https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=default";
 	document.head.appendChild(importedPoly);
 	let placesLibrary = "";
 	if (usePlacesLibrary == true) {
